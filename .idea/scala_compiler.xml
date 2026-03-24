@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ScalaCompilerConfiguration">
+    <option name="separateProdTestSources" value="true" />
+    <profile name="sbt 1" modules="pps-lab03,pps-lab03.main,pps-lab03.test,pps-lab03_1729,pps-lab03_1729.main,pps-lab03_1729.test" />
+  </component>
+</project>
