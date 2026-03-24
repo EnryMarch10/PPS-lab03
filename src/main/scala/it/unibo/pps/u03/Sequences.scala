@@ -1,6 +1,6 @@
-package u03
+package it.unibo.pps.u03
 
-import u03.Optionals.Optional
+import Optionals.Optional
 
 import scala.annotation.tailrec
 
@@ -164,9 +164,9 @@ object Sequences: // Essentially, generic linkedlists
      * E.g., [10, 20, 30] => ([10], [20, 30]) if pred is (_ < 20)
      * E.g., [11, 20, 31] => ([20], [11, 31]) if pred is (_ % 2 == 0)
      */
-    def partition[A](s: Sequence[A])(pred: A => Boolean): (Sequence[A], Sequence[A]) = ???
+    def partition[A](s: Sequence[A])(predicate: A => Boolean): (Sequence[A], Sequence[A]) = ???
 
-@main def trySequences =
+@main def trySequences(): Unit =
   import Sequences.*
   val l = Sequence.Cons(10, Sequence.Cons(20, Sequence.Cons(30, Sequence.Nil())))
   println(Sequence.sum(l)) // 30
