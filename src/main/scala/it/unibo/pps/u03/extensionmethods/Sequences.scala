@@ -1,7 +1,7 @@
-package u03.extensionmethods
+package it.unibo.pps.u03.extensionmethods
 
 object Sequences:
-  
+
   enum Sequence[E]:
     case Cons(head: E, tail: Sequence[E])
     case Nil()
@@ -30,10 +30,9 @@ object Sequences:
 @main def trySequences() =
   import Sequences.*
   import Sequence.*
-  
+
   val seq = Cons(10, Cons(20, Cons(30, Nil())))
   println(seq.filter(_ >= 20).map(_ + 1).sum) // 21+31 = 52
   println(sum(map(filter(seq)(_ >= 20))(_ + 1))) // equally possible
   val seq2 = of(10, -1) // Cons(-1, Cons(-1, Cons(-1, ...)))
   println(seq2.sum) // -10
-  

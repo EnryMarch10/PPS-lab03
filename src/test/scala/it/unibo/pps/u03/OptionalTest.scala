@@ -3,7 +3,7 @@ package it.unibo.pps.u03
 import org.junit.*
 import org.junit.Assert.*
 
-class OptionTest:
+class OptionalTest:
 
   // imports needed to work with Options
   import u03.Optionals.*

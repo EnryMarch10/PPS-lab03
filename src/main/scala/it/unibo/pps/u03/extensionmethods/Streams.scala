@@ -1,4 +1,4 @@
-package u03.extensionmethods
+package it.unibo.pps.u03.extensionmethods
 
 object Streams:
 
