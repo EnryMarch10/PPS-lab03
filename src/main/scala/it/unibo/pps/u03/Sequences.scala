@@ -2,26 +2,58 @@ package u03
 
 import u03.Optionals.Optional
 
+import scala.annotation.tailrec
+
 object Sequences: // Essentially, generic linkedlists
-  
+
   enum Sequence[E]:
     case Cons(head: E, tail: Sequence[E])
     case Nil()
 
   object Sequence:
 
-    def sum(l: Sequence[Int]): Int = l match
-      case Cons(h, t) => h + sum(t)
-      case _          => 0
+    extension [E](s1: Sequence[E])
+        def headAdd(s2: Sequence[E]): Sequence[E] = (s1, s2) match
+            case (_, Cons(h2, t2)) => Cons(h2, s1.headAdd(t2))
+            case _                 => s1
+//            case (Cons(h1, t1), _) => Cons(h1, t1.headAdd(s2))
+//            case _                 => Nil()\
 
-    def map[A, B](l: Sequence[A])(mapper: A => B): Sequence[B] = l match
+// TODO: tried to tail but the following also reverses ORDER, maybe can't be tailed.
+//            @tailrec
+//            def _headAdd(s1: Sequence[E], s2: Sequence[E], acc: Sequence[E] = Nil()): Sequence[E] = (s1, s2) match
+//                case (_, Cons(h2, t2)) => _headAdd(s1, t2, Cons(h2, acc))
+//                case _ => acc
+//            _headAdd(s1, s2)
+
+        def headAddElement(e: E): Sequence[E] = headAdd(Cons(e, Nil()))
+
+        def tailAdd(s2: Sequence[E]): Sequence[E] = s1 match
+            case Cons(h, t) => Cons(h, t.tailAdd(s2))
+            case _          => s2
+
+        def tailAddElement(e: E): Sequence[E] = tailAdd(Cons(e, Nil()))
+
+    def sum(s: Sequence[Int]): Int =
+        @tailrec
+        def _sum(s: Sequence[Int], acc: Int = 0): Int = s match
+            case Cons(h, t) => _sum(t, h + acc)
+            case _ => acc
+        _sum(s)
+// RECURSIVE
+//        l match
+//          case Cons(h, t) => h + sum(t)
+//          case _          => 0
+
+    def map[A, B](s: Sequence[A])(mapper: A => B): Sequence[B] = s match
       case Cons(h, t) => Cons(mapper(h), map(t)(mapper))
-      case Nil()      => Nil()
+      case _          => Nil()
+//      case Nil()      => Nil()
 
-    def filter[A](l1: Sequence[A])(pred: A => Boolean): Sequence[A] = l1 match
-      case Cons(h, t) if pred(h) => Cons(h, filter(t)(pred))
-      case Cons(_, t)            => filter(t)(pred)
-      case Nil()                 => Nil()
+    def filter[A](s: Sequence[A])(predicate: A => Boolean): Sequence[A] = s match
+      case Cons(h, t) if predicate(h) => Cons(h, filter(t)(predicate))
+      case Cons(_, t)                 => filter(t)(predicate)
+      case _                          => Nil()
 
     // Lab 03
 
@@ -32,7 +64,10 @@ object Sequences: // Essentially, generic linkedlists
      * E.g., [10, 20, 30], 0 => [10, 20, 30]
      * E.g., [], 2 => []
      */
-    def skip[A](s: Sequence[A])(n: Int): Sequence[A] = ???
+    @tailrec
+    def skip[A](s: Sequence[A])(n: Int): Sequence[A] = s match
+        case Cons(h, t) if n > 0 => skip(t)(n - 1)
+        case _ => s
 
     /*
      * Zip two sequences
@@ -40,7 +75,11 @@ object Sequences: // Essentially, generic linkedlists
      * E.g., [10], [] => []
      * E.g., [], [] => []
      */
-    def zip[A, B](first: Sequence[A], second: Sequence[B]): Sequence[(A, B)] = ???
+    def zip[A, B](s1: Sequence[A], s2: Sequence[B]): Sequence[(A, B)] = (s1, s2) match
+        case (Cons(h1, t1), Cons(h2, t2)) => Cons((h1, h2), zip(t1, t2))
+        case _ => Nil()
+//        case (Cons(h2, t2), Nil()) => Nil()
+//        case (Nil(), Cons(h2, t2)) => Nil()
 
     /*
      * Concatenate two sequences
@@ -48,7 +87,13 @@ object Sequences: // Essentially, generic linkedlists
      * E.g., [10], [] => [10]
      * E.g., [], [] => []
      */
-    def concat[A](s1: Sequence[A], s2: Sequence[A]): Sequence[A] = ???
+    def concat[A](s1: Sequence[A], s2: Sequence[A]): Sequence[A] = s1 match
+        case Cons(h, t) => Cons(h, concat(t, s2))
+        case _ => s2
+//        (s1, s2) match
+//            case (Cons(h1, t1), _) => Cons(h1, concat(t1, s2))
+//            case (_, Cons(h2, t2)) => Cons(h2, concat(s1, t2))
+//            case _ => Nil()
 
     /*
      * Reverse the sequence
@@ -56,7 +101,15 @@ object Sequences: // Essentially, generic linkedlists
      * E.g., [10] => [10]
      * E.g., [] => []
      */
-    def reverse[A](s: Sequence[A]): Sequence[A] = ???
+    def reverse[A](s: Sequence[A]): Sequence[A] =
+        @tailrec
+        def _reverse(s: Sequence[A], res: Sequence[A]): Sequence[A] = s match
+            case Cons(h, t) => _reverse(t, Cons(h, res));
+            case _ => res
+        _reverse(s, Nil())
+//        s match
+//          case Cons(h, t) => reverse(t).tailAddElement(h); // Potevi farlo con la concat
+//          case _ => Nil()
 
     /*
      * Map the elements of the sequence to a new sequence and flatten the result
@@ -64,7 +117,11 @@ object Sequences: // Essentially, generic linkedlists
      * E.g., [10, 20, 30], calling with mapper(v => [v]) returns [10, 20, 30]
      * E.g., [10, 20, 30], calling with mapper(v => Nil()) returns []
      */
-    def flatMap[A, B](s: Sequence[A])(mapper: A => Sequence[B]): Sequence[B] = ???
+    def flatMap[A, B](s: Sequence[A])(mapper: A => Sequence[B]): Sequence[B] = s match
+        case Cons(h, t) => concat(mapper(h), flatMap(t)(mapper))
+        case _ => Nil()
+//        case Cons(h, t) => flatMap(t)(mapper).headAdd(mapper(h))
+//        case _ => Nil()
 
     /*
      * Get the minimum element in the sequence
@@ -110,7 +167,7 @@ object Sequences: // Essentially, generic linkedlists
     def partition[A](s: Sequence[A])(pred: A => Boolean): (Sequence[A], Sequence[A]) = ???
 
 @main def trySequences =
-  import Sequences.* 
+  import Sequences.*
   val l = Sequence.Cons(10, Sequence.Cons(20, Sequence.Cons(30, Sequence.Nil())))
   println(Sequence.sum(l)) // 30
 
