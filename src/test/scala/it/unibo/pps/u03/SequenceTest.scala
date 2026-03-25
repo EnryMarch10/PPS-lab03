@@ -104,3 +104,7 @@ class SequenceTest:
     val sequence = Cons(10, Cons(10, Cons(20, Cons(30, Cons(20, Nil())))))
     assertEquals("[10, 10, 20, 30, 20]", show(sequence))
     assertEquals("[[10, 10], [20], [30], [20]]", show(group(sequence)))
+
+  @Test def testFoldLeft(): Unit =
+    val lst = Cons(3, Cons(7, Cons(1, Cons(5, Nil()))))
+    assertEquals(-16, foldLeft(lst)(0)(_ - _))

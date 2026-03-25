@@ -23,3 +23,10 @@ object PersonSequences:
       case Teacher(_, course) => Cons(course, Nil());
       case _ => Nil()
     }
+
+  def distinctCoursesOfTeachers(s: Sequence[Person]): Sequence[String] =
+    distinct(map(filter(s)(_.isInstanceOf[Teacher]))(_.asInstanceOf[Teacher].course))
+
+  def distinctCoursesOfTeachersAsString(s: Sequence[Person]): String = distinctCoursesOfTeachers(s) match
+    case Cons(h, t) => foldLeft(t)(h)(_ + ", " + _)
+    case _ => ""

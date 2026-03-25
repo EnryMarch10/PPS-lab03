@@ -216,6 +216,11 @@ object Sequences: // Essentially, generic linkedlists
         case Cons(h, t) => start + _show(s) + end
         case _ => start + end
 
+    @tailrec
+    def foldLeft[E](s: Sequence[E])(n: E)(f: (E, E) => E): E = s match
+      case Cons(h, t) => foldLeft(t)(f(n, h))(f)
+      case _ => n
+
 @main def trySequences(): Unit =
   import Sequences.*
   val l = Sequence.Cons(10, Sequence.Cons(20, Sequence.Cons(30, Sequence.Nil())))
