@@ -46,9 +46,9 @@ class SequenceTest:
     assertEquals(Cons(40, Cons(50, Nil())), l2.headAdd(Nil()))
 
   @Test def myTestTailAdd(): Unit =
-      val l2: Sequence[Int] = Cons(40, Cons(50, Nil()))
-      assertEquals(Cons(10, Cons(20, Cons(30, Cons(40, Cons(50, Nil()))))), sequence.tailAdd(l2))
-      assertEquals(Cons(40, Cons(50, Nil())), Nil().tailAdd(l2))
+    val l2: Sequence[Int] = Cons(40, Cons(50, Nil()))
+    assertEquals(Cons(10, Cons(20, Cons(30, Cons(40, Cons(50, Nil()))))), sequence.tailAdd(l2))
+    assertEquals(Cons(40, Cons(50, Nil())), Nil().tailAdd(l2))
 
   @Test def testReverse(): Unit =
     assertEquals(Cons(30, Cons(20, Cons(10, Nil()))), reverse(sequence))
@@ -78,10 +78,16 @@ class SequenceTest:
     assertEquals(Nil(), distinct(Nil()))
 
   @Test def testGroup(): Unit =
-    val sequence = Cons(10, Cons(10, Cons(20, Cons(30, Cons(20, Nil())))))
-    val grouped =
+    val sequence1 = Cons(10, Cons(10, Cons(20, Cons(30, Cons(20, Nil())))))
+    val grouped1 =
       Cons(Cons(10, Cons(10, Nil())), Cons(Cons(20, Nil()), Cons(Cons(30, Nil()), Cons(Cons(20, Nil()), Nil()))))
-    assertEquals(group(sequence), grouped)
+    val sequence2 = Cons(10, Cons(13, Cons(20, Cons(20, Cons(20, Nil())))))
+    val grouped2 = Cons(Cons(10, Nil()), Cons(Cons(13, Nil()), Cons(Cons(20, Cons(20, Cons(20, Nil()))),Nil())))
+    val sequence3 = Cons(20, Cons(20, Cons(10, Cons(20, Cons(20, Nil())))))
+    val grouped3 = Cons(Cons(20, Cons(20, Nil())), Cons(Cons(10, Nil()), Cons(Cons(20, Cons(20, Nil())), Nil())))
+    assertEquals(grouped1, group(sequence1))
+    assertEquals(grouped2, group(sequence2))
+    assertEquals(grouped3, group(sequence3))
     assertEquals(Nil(), group(Nil()))
 
   @Test def testPartition(): Unit =
@@ -89,8 +95,12 @@ class SequenceTest:
     val (even, odd) = partition(sequence)(x => x % 2 == 0)
     assertEquals(Cons(20, Nil()), even)
     assertEquals(Cons(11, Cons(31, Nil())), odd)
-
     val emptySequence = Nil()
     val (evenEmpty, oddEmpty) = partition(emptySequence)(x => true)
     assertEquals(Nil(), evenEmpty)
     assertEquals(Nil(), oddEmpty)
+
+  @Test def testShow(): Unit =
+    val sequence = Cons(10, Cons(10, Cons(20, Cons(30, Cons(20, Nil())))))
+    assertEquals("[10, 10, 20, 30, 20]", show(sequence))
+    assertEquals("[[10, 10], [20], [30], [20]]", show(group(sequence)))
