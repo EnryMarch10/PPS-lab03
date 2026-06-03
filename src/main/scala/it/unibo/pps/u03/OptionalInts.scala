@@ -8,12 +8,12 @@ object OptionalInts:
     case Just(i: Int)
     case Empty
 
-  // operations (/algorithms)
+  // operations (algorithms)
   object OptionalInt:
 
     def isEmpty(opt: OptionalInt): Boolean = opt match
       case Empty => true
-      case _       => false
+      case _     => false
 
     def orElse(opt: OptionalInt, orElse: Int): Int = opt match
       case Just(a) => a

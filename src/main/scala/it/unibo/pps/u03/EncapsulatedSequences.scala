@@ -23,7 +23,7 @@ object EncapsulatedSequences:
       case Nil()      => Nil()
 
 object AdditionalSequencesAlgorithms:
-  import EncapsulatedSequences.*      
+  import EncapsulatedSequences.*
   // cases are not accessible: how could this be implemented?
   def filter[A](l1: Sequence[A])(pred: A => Boolean): Sequence[A] = ???
 
@@ -31,4 +31,4 @@ object AdditionalSequencesAlgorithms:
   import EncapsulatedSequences.*, Sequence.*
 
   val l = cons(10, cons(20, cons(30, nil())))
-  println(sum(map(l)(_ + 1))) 
+  println(sum(map(l)(_ + 1)))

@@ -1,6 +1,6 @@
 package it.unibo.pps.u03
 
-object Lazyness extends App:
+object Laziness extends App:
 
   def loop[A](a: A): A = loop(a)
 
@@ -42,4 +42,3 @@ object Lazyness extends App:
   println(sPairL(10, 20)) // (10,10)
   println(sPairL({println("e1");10}, {println("e2");20})) //e1 (10,10)
   println(sPairL(10, loop(20))) // (10,10)
-

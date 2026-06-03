@@ -8,7 +8,7 @@ object Optionals:
     case Just(a: A)
     case Empty() // here parens are needed because of genericity
 
-  // operations (/algorithms)
+  // operations (algorithms)
   object Optional:
 
     def isEmpty[A](opt: Optional[A]): Boolean = opt match

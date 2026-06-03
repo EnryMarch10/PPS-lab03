@@ -1,6 +1,6 @@
 package it.unibo.pps.u03
 
-object Streams extends App :
+object Streams extends App:
 
   import Sequences.*
 

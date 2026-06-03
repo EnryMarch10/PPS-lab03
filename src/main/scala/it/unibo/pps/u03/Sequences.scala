@@ -4,7 +4,7 @@ import Optionals.Optional
 
 import scala.annotation.tailrec
 
-object Sequences: // Essentially, generic linkedlists
+object Sequences: // Essentially, generic linked lists
 
   enum Sequence[E]:
     case Cons(head: E, tail: Sequence[E])
@@ -16,15 +16,15 @@ object Sequences: // Essentially, generic linkedlists
       def headAdd(s2: Sequence[E]): Sequence[E] = (s1, s2) match
         case (_, Cons(h2, t2)) => Cons(h2, s1.headAdd(t2))
         case _                 => s1
-//            case (Cons(h1, t1), _) => Cons(h1, t1.headAdd(s2))
-//            case _                 => Nil()\
+//        case (Cons(h1, t1), _) => Cons(h1, t1.headAdd(s2))
+//        case _                 => Nil()
 
 // TODO: tried to tail but the following also reverses ORDER, maybe can't be tailed.
-//            @tailrec
-//            def _headAdd(s1: Sequence[E], s2: Sequence[E], acc: Sequence[E] = Nil()): Sequence[E] = (s1, s2) match
-//                case (_, Cons(h2, t2)) => _headAdd(s1, t2, Cons(h2, acc))
-//                case _ => acc
-//            _headAdd(s1, s2)
+//        @tailrec
+//        def _headAdd(s1: Sequence[E], s2: Sequence[E], acc: Sequence[E] = Nil()): Sequence[E] = (s1, s2) match
+//            case (_, Cons(h2, t2)) => _headAdd(s1, t2, Cons(h2, acc))
+//            case _ => acc
+//        _headAdd(s1, s2)
 
       def headAddElement(e: E): Sequence[E] = headAdd(Cons(e, Nil()))
 
@@ -78,8 +78,8 @@ object Sequences: // Essentially, generic linkedlists
     def zip[A, B](s1: Sequence[A], s2: Sequence[B]): Sequence[(A, B)] = (s1, s2) match
       case (Cons(h1, t1), Cons(h2, t2)) => Cons((h1, h2), zip(t1, t2))
       case _ => Nil()
-//        case (Cons(h2, t2), Nil()) => Nil()
-//        case (Nil(), Cons(h2, t2)) => Nil()
+//      case (Cons(h2, t2), Nil()) => Nil()
+//      case (Nil(), Cons(h2, t2)) => Nil()
 
     /*
      * Concatenate two sequences
@@ -90,10 +90,10 @@ object Sequences: // Essentially, generic linkedlists
     def concat[A](s1: Sequence[A], s2: Sequence[A]): Sequence[A] = s1 match
       case Cons(h, t) => Cons(h, concat(t, s2))
       case _ => s2
-//        (s1, s2) match
-//            case (Cons(h1, t1), _) => Cons(h1, concat(t1, s2))
-//            case (_, Cons(h2, t2)) => Cons(h2, concat(s1, t2))
-//            case _ => Nil()
+//      (s1, s2) match
+//        case (Cons(h1, t1), _) => Cons(h1, concat(t1, s2))
+//        case (_, Cons(h2, t2)) => Cons(h2, concat(s1, t2))
+//        case _ => Nil()
 
     /*
      * Reverse the sequence
@@ -120,8 +120,8 @@ object Sequences: // Essentially, generic linkedlists
     def flatMap[A, B](s: Sequence[A])(mapper: A => Sequence[B]): Sequence[B] = s match
       case Cons(h, t) => concat(mapper(h), flatMap(t)(mapper))
       case _ => Nil()
-//        case Cons(h, t) => flatMap(t)(mapper).headAdd(mapper(h))
-//        case _ => Nil()
+//      case Cons(h, t) => flatMap(t)(mapper).headAdd(mapper(h))
+//      case _ => Nil()
 
     /*
      * Get the minimum element in the sequence
@@ -167,12 +167,12 @@ object Sequences: // Essentially, generic linkedlists
       case Cons(h, t) if contains(t)(h) => Cons(h, distinct(filter(t)(_ != h)))
       case Cons(h, t) => Cons(h, distinct(t))
       case _ => Nil()
-//        @tailrec
-//        def _distinct(r: Sequence[A], acc: Sequence[A] = Nil()): Sequence[A] = r match
-//            case Cons(h, t) if !contains(t)(h) => _distinct(t, Cons(h, acc))
-//            case Cons(_, t) => _distinct(t, acc)
-//            case _ => acc
-//        _distinct(reverse(s))
+//      @tailrec
+//      def _distinct(r: Sequence[A], acc: Sequence[A] = Nil()): Sequence[A] = r match
+//          case Cons(h, t) if !contains(t)(h) => _distinct(t, Cons(h, acc))
+//          case Cons(_, t) => _distinct(t, acc)
+//          case _ => acc
+//      _distinct(reverse(s))
 
     /*
      * Group contiguous elements in the sequence

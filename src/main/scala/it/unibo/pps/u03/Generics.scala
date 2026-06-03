@@ -1,6 +1,6 @@
 package it.unibo.pps.u03
 
-object Generics extends App :
+object Generics extends App:
 
   // Generic methods, in 1 and 2 type variables
   def f1[A](a: A, b: A): A = a
